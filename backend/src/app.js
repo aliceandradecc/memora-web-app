@@ -1,65 +1,28 @@
-import express from "express"
-import { AdministradorService } from "./services/AdministradorService.js"
-import { LogInService } from "./services/LogInService.js"
-import { PermissaoService } from "./services/PermissaoService.js"
+import express from 'express';
+import cors from 'cors';
+import morgan from 'morgan';
+import pool from '../config/database.js';
+import authRoutes from './routes/authRoutes.js';
+import dotenv from 'dotenv'
 
-const adminService = new AdministradorService()
-const loginService = new LogInService()
-const permissaoService = new PermissaoService()
+dotenv.config()
+const app = express();
 
-const app = express()
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
+app.use(morgan('dev'));
 
-const port = 3333
+app.use('/api/auth', authRoutes);
 
-// administrador
-app.get("/administrador", (req, res) => {
-    res.send(adminService.administradores)
-}) 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ msg: 'Algo deu errado no servidor' });
+});
 
-app.post("/administrador", (req, res) => {
-    adminService.cadastrarAdministrador(req.body.nome_de_usuario, req.body.email, req.body.senha, req.body.id_permissao)
-    res.send("Ok")
-}) 
+// iniciar servidor
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
-app.put("/administrador", (req, res) => {
-    adminService.editarAdministrador(req.body.email, req.body.novo_nome, req.body.novo_email, req.body.nova_senha, req.body.novo_status, req.body.novo_id_permissao)
-    res.send("Ok")
-}) 
-
-app.delete("/administrador", (req, res) => {
-    adminService.deletarAdministrador(req.body.email)
-    res.send("Ok")
-}) 
-
-// login
-app.get("/login", (req, res) => {
-    res.send(loginService.logins)
-}) 
-
-app.post("/login", (req, res) => {
-    loginService.gerarLogIn(req.body.data_login, req.body.data_expiracao, req.body.id_administrador)
-    res.send("Ok")
-}) 
-
-// permissão
-app.get("/permissao", (req, res) => {
-    res.send(permissaoService.permissoes)
-}) 
-
-app.post("/permissao", (req, res) => {
-    permissaoService.criarPermissao(req.body.descricao, req.body.nome)
-    res.send("Ok")
-}) 
-
-app.put("/permissao", (req, res) => {
-    permissaoService.editarPermissao(req.body.nome, req.body.novo_nome, req.body.nova_descricao)
-    res.send("Ok")
-}) 
-
-app.delete("/permissao", (req, res) => {
-    permissaoService.deletarPermissao(req.body.id_permissao)
-    res.send("Ok")
-}) 
-
-app.listen(port)
+export default app;
