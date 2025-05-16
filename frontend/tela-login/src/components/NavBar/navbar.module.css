@@ -1,0 +1,15 @@
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 95vw;
+    height: 10vh;
+    border: 2px solid red;
+}
+
+.option {
+    border-bottom: 4px solid var(--primary-color);
+    font-size: 20px;
+    padding-bottom: 10px;
+    text-transform: uppercase;
+}

@@ -1,0 +1,15 @@
+.container {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+    background-color: var(--bg-header);
+    width: 100vw;
+    height: 10vh;
+}
+
+.logo {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
