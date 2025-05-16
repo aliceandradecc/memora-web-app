@@ -5,10 +5,12 @@
     flex-direction: column;
     background-color: var(--primary-color);
     width: 5vw;
-    height: 100%;
-    padding-bottom: 10px;
+    height: 100vh;
+    padding-bottom: 20px;
 }
 
 .button {
-
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
 }

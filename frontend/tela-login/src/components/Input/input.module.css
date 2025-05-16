@@ -8,7 +8,6 @@
 }
 
 .userName {
-    margin-top: 20px;
     color: var(--textColor);
     font-size: 12px;
     font-family: var(--font-montserrat);

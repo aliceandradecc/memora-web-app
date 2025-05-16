@@ -1,10 +1,31 @@
+"use client";
 import Header from "@/components/Header/header";
 import styles from "./main.module.css"
 import GreenLeftBar from "@/components/GreenLeftBar/GreenLeftBar";
-import NavBar from "@/components/NavBar/NavBar";
 import Menu from "@/components/Menu/Menu";
+import List from "@/components/List/List";
+import { useState } from "react";
+import { admninistradores } from "@/utils/administradores";
+import { permissoes } from "@/utils/permissoes";
+import { publications } from "@/utils/publicacoes";
+import Avatar from "@/assets/user-profile.png";
+import Shield from "@/assets/shield.png";
+import Icon from "@/assets/image-add.png";
 
 export default function main() {
+    const [page, setPage] = useState("administrador");
+    const [icon, setIcon] = useState("Avatar");
+
+    let ActualPage = admninistradores;
+
+    if(page == "administrador") {
+        ActualPage = admninistradores;
+    } else if(page == "permissao") {
+        ActualPage = permissoes;
+    } else if(page == "publicacao") {
+        ActualPage = publications;
+    }
+
     return (
         <div className={styles.container}>
           <Header />
@@ -12,11 +33,24 @@ export default function main() {
             <GreenLeftBar />
 
             <div className={styles.content}>
-              <NavBar />
-              <Menu />
-              <div className={styles.data}>
-                <h1>Principal</h1>
-              </div>
+              <nav className={styles.navbar}>
+                <h1 className={styles.option} onClick={() => {setPage("administrador"), setIcon("Avatar")}}>Administradores</h1>
+                <h1 className={styles.option} onClick={() => {setPage("permissao"), setIcon("Shield")}}>Permissões</h1>
+                <h1 className={styles.option} onClick={() => {setPage("publicacao"), setIcon("Icon")}}>Publicações</h1>
+              </nav>
+              <Menu page={page} />
+                <ul className={styles.data}>
+
+
+                {
+                  ActualPage.map((item) =>
+                    <List  key={item.id} icon={icon} name={item.title} />
+                  )
+                }
+
+
+                  
+                </ul>
             </div>
           </div>
         </div>

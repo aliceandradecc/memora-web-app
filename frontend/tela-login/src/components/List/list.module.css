@@ -1,0 +1,30 @@
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    width: 100%;
+    border-bottom: 2px solid #d3d3d3;
+    padding-bottom: 10px;
+}
+
+.user {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.options {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+}
+
+.button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
