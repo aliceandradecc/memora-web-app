@@ -17,7 +17,6 @@ class AdministratorService {
   }
 
   static async loginAdministrator(email, password_a) {
-  // Validate inputs
   if (!email || !password_a) {
     throw new Error('Email e senha são obrigatórios');
   }
