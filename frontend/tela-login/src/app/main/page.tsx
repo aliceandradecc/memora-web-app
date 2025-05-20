@@ -11,6 +11,7 @@ import { publications } from "@/utils/publicacoes";
 import Avatar from "@/assets/user-profile.png";
 import Shield from "@/assets/shield.png";
 import Icon from "@/assets/image-add.png";
+import ProtectedRoute from '../../components/ProtectedRoute/ProtectedRoute';
 
 export default function main() {
     const [page, setPage] = useState("administrador");
@@ -27,6 +28,7 @@ export default function main() {
     }
 
     return (
+      <ProtectedRoute>
         <div className={styles.container}>
           <Header />
           <div className={styles.main}>
@@ -47,12 +49,10 @@ export default function main() {
                     <List  key={item.id} icon={icon} name={item.title} />
                   )
                 }
-
-
-                  
                 </ul>
             </div>
           </div>
         </div>
+      </ProtectedRoute>
     );
 }
