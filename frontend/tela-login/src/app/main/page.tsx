@@ -1,58 +1,79 @@
 "use client";
 import Header from "@/components/Header/header";
-import styles from "./main.module.css"
+import styles from "./main.module.css";
 import GreenLeftBar from "@/components/GreenLeftBar/GreenLeftBar";
 import Menu from "@/components/Menu/Menu";
 import List from "@/components/List/List";
-import { useState } from "react";
-import { admninistradores } from "@/utils/administradores";
-import { permissoes } from "@/utils/permissoes";
-import { publications } from "@/utils/publicacoes";
+import { useEffect, useState } from "react";
 import Avatar from "@/assets/user-profile.png";
 import Shield from "@/assets/shield.png";
 import Icon from "@/assets/image-add.png";
-import ProtectedRoute from '../../components/ProtectedRoute/ProtectedRoute';
+import ProtectedRoute from "../../components/ProtectedRoute/ProtectedRoute";
 
 export default function main() {
-    const [page, setPage] = useState("administrador");
-    const [icon, setIcon] = useState("Avatar");
+  const [page, setPage] = useState("administrador");
+  const [icon, setIcon] = useState("Avatar");
+  const [items, setItems] = useState<{ id: number; title: string }[]>([]);
 
-    let ActualPage = admninistradores;
+  useEffect(() => {
+    let endpoint = "";
 
-    if(page == "administrador") {
-        ActualPage = admninistradores;
-    } else if(page == "permissao") {
-        ActualPage = permissoes;
-    } else if(page == "publicacao") {
-        ActualPage = publications;
-    }
+    if (page === "administrador") endpoint = "/api/administradores";
+    else if (page === "permissao") endpoint = "/api/permissoes";
+    else if (page === "publicacao") endpoint = "/api/publicacoes";
 
-    return (
-      <ProtectedRoute>
-        <div className={styles.container}>
-          <Header />
-          <div className={styles.main}>
-            <GreenLeftBar />
+    fetch(`http://localhost:5000${endpoint}`)
+      .then((res) => res.json())
+      .then((data) => setItems(data))
+      .catch((err) => console.error("Erro ao carregar dados:", err));
+  }, [page]);
 
-            <div className={styles.content}>
-              <nav className={styles.navbar}>
-                <h1 className={styles.option} onClick={() => {setPage("administrador"), setIcon("Avatar")}}>Administradores</h1>
-                <h1 className={styles.option} onClick={() => {setPage("permissao"), setIcon("Shield")}}>Permissões</h1>
-                <h1 className={styles.option} onClick={() => {setPage("publicacao"), setIcon("Icon")}}>Publicações</h1>
-              </nav>
-              <Menu page={page} />
-                <ul className={styles.data}>
+  return (
+    <ProtectedRoute>
+      <div className={styles.container}>
+        <Header />
+        <div className={styles.main}>
+          <GreenLeftBar />
 
-
-                {
-                  ActualPage.map((item) =>
-                    <List  key={item.id} icon={icon} name={item.title} />
-                  )
-                }
-                </ul>
-            </div>
+          <div className={styles.content}>
+            <nav className={styles.navbar}>
+              <h1
+                className={styles.option}
+                onClick={() => {
+                  setPage("administrador");
+                  setIcon("Avatar");
+                }}
+              >
+                Administradores
+              </h1>
+              <h1
+                className={styles.option}
+                onClick={() => {
+                  setPage("permissao");
+                  setIcon("Shield");
+                }}
+              >
+                Permissões
+              </h1>
+              <h1
+                className={styles.option}
+                onClick={() => {
+                  setPage("publicacao");
+                  setIcon("Icon");
+                }}
+              >
+                Publicações
+              </h1>
+            </nav>
+            <Menu page={page} />
+            <ul className={styles.data}>
+              {items.map((item) => (
+                <List key={item.id} icon={icon} name={item.title} />
+              ))}
+            </ul>
           </div>
         </div>
-      </ProtectedRoute>
-    );
+      </div>
+    </ProtectedRoute>
+  );
 }
